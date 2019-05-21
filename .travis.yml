@@ -1,3 +1,4 @@
+dist: trusty
 language: node_js
 node_js:
     - 11
@@ -6,6 +7,12 @@ branches:
     - gh-pages
     - l10n_develop
     
+addons:
+  sonarcloud:
+    organization: "kinbald-github"
+    
+script:
+  - sonar-scanner -Dsonar.projectKey=kinbald_juice-shop 
 service:
     - docker
     
