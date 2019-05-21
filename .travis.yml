@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - 11
+    - 11
 branches:
   except:
     - gh-pages
@@ -10,11 +10,12 @@ service:
     - docker
     
 env:
-  - IMAGE_NAME=483761293063.dkr.ecr.eu-west-1.amazonaws.com/isentest:1.0-$TRAVIS_BUILD_NUMBER
+    - IMAGE_NAME=483761293063.dkr.ecr.eu-west-1.amazonaws.com/isentest:1.0-$TRAVIS_BUILD_NUMBER
 
 after_success:
 #  - rm -rf node_modules
 #  - rm -rf frontend/node_modules
 #  - npm install --production
 #  - npm run package
-  - docker build  -t kinbald/juice-shop .
+    - docker build  -t kinbald/juice-shop .
+    - pip install --user awscli
