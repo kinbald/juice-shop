@@ -6,19 +6,27 @@ branches:
   except:
     - gh-pages
     - l10n_develop
-    
+        
 addons:
   sonarcloud:
     organization: "kinbald-github"
-    
+
+before_script:
+    - mkdir -p $HOME/bin
+    - wget https://bintray.com/jeremy-long/owasp/download_file?file_path=dependency-check-5.0.0-M3-release.zip -O $HOME/bin/dc.zip
+    - cd $HOME/bin/ && unzip dc.zip
+    - cd -
+ 
 script:
-    - npm test
-    - sonar-scanner -Dsonar.projectKey=kinbald_juice-shop -Dsonar.javascript.lcov.reportPaths=./build/reports/coverage/server-tests/lcov.info
+    - $HOME/bin/dependency-check/bin/dependency-check.sh --project juice-shop -s . 
+ #   - npm test
+ #   - sonar-scanner -Dsonar.projectKey=kinbald_juice-shop -Dsonar.javascript.lcov.reportPaths=./build/reports/coverage/server-tests/lcov.info
 service:
     - docker
     
 env:
     - IMAGE_NAME=483761293063.dkr.ecr.eu-west-1.amazonaws.com/isentest:1.0-$TRAVIS_BUILD_NUMBER
+    - S3=arn:aws:s3:::travis-dependency-check
 
 after_success:
 #  - rm -rf node_modules
@@ -30,5 +38,6 @@ after_success:
     - docker build  -t kinbald/juice-shop .   
     - docker tag kinbald/juice-shop $IMAGE_NAME
     - docker push $IMAGE_NAME
+   # - aws s3 cp 
     - aws cloudformation deploy --template-file ./ecs-task.yaml --stack-name ISENStackDeploy --region eu-west-1 --parameter-override ImageName=$IMAGE_NAME
     - aws cloudformation update-stack --template-body file://./ecs-task.yaml --stack-name ISENStackDeploy --region eu-west-1 --parameters "ParameterKey=ImageName,ParameterValue=$IMAGE_NAME"
