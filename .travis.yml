@@ -10,18 +10,17 @@ branches:
 addons:
   sonarcloud:
     organization: "kinbald-github"
-  artifacts:
-    s3_region: "eu-west-1"
+  artifacts: true
 
 before_script:
     - mkdir -p $HOME/bin
-    - wget https://bintray.com/jeremy-long/owasp/download_file?file_path=dependency-check-5.0.0-M3-release.zip -O $HOME/bin/dc.zip
+    - wget https://bintray.com/jeremy-long/owasp/download_file?file_path=dependency-check-4.0.2-release.zip -O $HOME/bin/dc.zip
     - cd $HOME/bin/ && unzip dc.zip
     - cd -
  
 script:
+    - npm install
     - $HOME/bin/dependency-check/bin/dependency-check.sh --project juice-shop -s . 
- #   - npm test
  #   - sonar-scanner -Dsonar.projectKey=kinbald_juice-shop -Dsonar.javascript.lcov.reportPaths=./build/reports/coverage/server-tests/lcov.info
 service:
     - docker
