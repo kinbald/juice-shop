@@ -13,7 +13,7 @@ addons:
   artifacts:
     region: "eu-west-1"
     paths:
-        - ./rapport
+        - ./report
 
 before_script:
     - mkdir -p $HOME/bin
@@ -23,7 +23,10 @@ before_script:
  
 script:
     - npm install
-    - sh $HOME/bin/dependency-check/bin/dependency-check.sh --project juice-shop -s . --out rapport 
+    - sudo mkdir report && sudo chown 1000:1000 report
+    - sh $HOME/bin/dependency-check/bin/dependency-check.sh --project juice-shop -s . --out report
+    - docker run -t -v $(pwd)/report:/zap/wrk/:rw owasp/zap2docker-stable zap-baseline.py -t http://54.171.133.1:32771/ -r testreport.html || true
+
  #   - sonar-scanner -Dsonar.projectKey=kinbald_juice-shop -Dsonar.javascript.lcov.reportPaths=./build/reports/coverage/server-tests/lcov.info
 service:
     - docker
