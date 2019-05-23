@@ -21,7 +21,6 @@ before_script:
  
 script:
     - $HOME/bin/dependency-check/bin/dependency-check.sh --project juice-shop -s . 
-    - ls
  #   - npm test
  #   - sonar-scanner -Dsonar.projectKey=kinbald_juice-shop -Dsonar.javascript.lcov.reportPaths=./build/reports/coverage/server-tests/lcov.info
 service:
@@ -40,6 +39,5 @@ after_success:
     - docker build  -t kinbald/juice-shop .   
     - docker tag kinbald/juice-shop $IMAGE_NAME
     - docker push $IMAGE_NAME
-   # - aws s3 cp 
     - aws cloudformation deploy --template-file ./ecs-task.yaml --stack-name ISENStackDeploy --region eu-west-1 --parameter-override ImageName=$IMAGE_NAME
     - aws cloudformation update-stack --template-body file://./ecs-task.yaml --stack-name ISENStackDeploy --region eu-west-1 --parameters "ParameterKey=ImageName,ParameterValue=$IMAGE_NAME"
