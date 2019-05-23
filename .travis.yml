@@ -51,4 +51,4 @@ after_success:
     - export PASSWORD=`echo $DOCKER_LOGIN | cut -d' ' -f6`
     - export REGISTRY=`echo $DOCKER_LOGIN | cut -d' ' -f7 | sed "s/https:\/\///"`
     - export DOCKER_USER=AWS DOCKER_PASSWORD=${PASSWORD} ./klar ${REGISTRY}/${IMAGE_NAME}
-    - $HOME/bin/klar CLAIR_ADDR=http://clair.3r1.co:6060 CLAIR_OUTPUT=High CLAIR_THRESHOLD=10 DOCKER_USER=$DOCKER_USER DOCKER_PASSWORD=$PASSWORD klar postgres:9.5.1
+    - CLAIR_ADDR=http://clair.3r1.co:6060 CLAIR_OUTPUT=High CLAIR_THRESHOLD=10 DOCKER_USER=$DOCKER_USER DOCKER_PASSWORD=$PASSWORD $HOME/bin/klar postgres:9.5.1
