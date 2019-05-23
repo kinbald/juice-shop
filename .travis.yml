@@ -10,7 +10,9 @@ branches:
 addons:
   sonarcloud:
     organization: "kinbald-github"
-  artifacts: true
+  artifacts:
+    paths:
+        - ./rapport
 
 before_script:
     - mkdir -p $HOME/bin
@@ -20,7 +22,7 @@ before_script:
  
 script:
     - npm install
-    - $HOME/bin/dependency-check/bin/dependency-check.sh --project juice-shop -s . 
+    - sh $HOME/bin/dependency-check/bin/dependency-check.sh --project juice-shop -s . --out rapport 
  #   - sonar-scanner -Dsonar.projectKey=kinbald_juice-shop -Dsonar.javascript.lcov.reportPaths=./build/reports/coverage/server-tests/lcov.info
 service:
     - docker
