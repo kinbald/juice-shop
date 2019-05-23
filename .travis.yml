@@ -10,7 +10,7 @@ branches:
 addons:
   sonarcloud:
     organization: "kinbald-github"
-  artifacts: true
+  artifacts:
     s3_region: "eu-west-1"
 
 before_script:
