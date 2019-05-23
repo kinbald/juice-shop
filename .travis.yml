@@ -18,14 +18,14 @@ addons:
 before_script:
     - mkdir -p $HOME/bin
     - wget https://bintray.com/jeremy-long/owasp/download_file?file_path=dependency-check-4.0.2-release.zip -O $HOME/bin/dc.zip
-    - wget https://github.com/optiopay/klar/releases/download/v2.4.0/klar-2.4.0-linux-amd64 -O $HOME/klar
+    - wget https://github.com/optiopay/klar/releases/download/v2.4.0/klar-2.4.0-linux-amd64 -O $HOME/bin/klar
     - cd $HOME/bin/ && unzip dc.zip
     - cd -
  
 script:
     - npm install
     - sudo mkdir report && sudo chown 1000:1000 report
- #   - sh $HOME/bin/dependency-check/bin/dependency-check.sh --project juice-shop -s . --out report
+#    - sh $HOME/bin/dependency-check/bin/dependency-check.sh --project juice-shop -s . --out report
 #    - docker run -t -v $(pwd)/report:/zap/wrk/:rw owasp/zap2docker-stable zap-baseline.py -t http://54.171.133.1:32771/ -r testreport.html || true
 
  #   - sonar-scanner -Dsonar.projectKey=kinbald_juice-shop -Dsonar.javascript.lcov.reportPaths=./build/reports/coverage/server-tests/lcov.info
@@ -50,5 +50,5 @@ after_success:
     - export DOCKER_LOGIN=`aws ecr get-login --no-include-email`
     - export PASSWORD=`echo $DOCKER_LOGIN | cut -d' ' -f6`
     - export REGISTRY=`echo $DOCKER_LOGIN | cut -d' ' -f7 | sed "s/https:\/\///"`
-    - export DOCKER_USER=AWS DOCKER_PASSWORD=${PASSWORD} ./klar ${REGISTRY}/${IMAGE_NAME}
+    - export DOCKER_USER=AWS DOCKER_PASSWORD=${PASSWORD} ${HOME}/bin/klar ${REGISTRY}/${IMAGE_NAME}
     - CLAIR_ADDR=http://clair.3r1.co:6060 CLAIR_OUTPUT=High CLAIR_THRESHOLD=10 DOCKER_USER=$DOCKER_USER DOCKER_PASSWORD=$PASSWORD $HOME/bin/klar postgres:9.5.1
