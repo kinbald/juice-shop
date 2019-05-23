@@ -11,6 +11,7 @@ addons:
   sonarcloud:
     organization: "kinbald-github"
   artifacts:
+    region: "eu-west-1"
     paths:
         - ./rapport
 
