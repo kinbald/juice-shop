@@ -10,6 +10,8 @@ branches:
 addons:
   sonarcloud:
     organization: "kinbald-github"
+  artifacts: true
+    s3_region: "eu-west-1"
 
 before_script:
     - mkdir -p $HOME/bin
